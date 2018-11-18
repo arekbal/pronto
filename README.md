@@ -1,2 +1,2 @@
 # pronto
-C++ build system
+Basic C++ build system
