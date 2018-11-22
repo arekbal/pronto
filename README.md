@@ -1,2 +1,2 @@
 # Pronto
-Basic C++ build system
+Basic C++ build system inspired by [Cargo](https://github.com/rust-lang/cargo/).
