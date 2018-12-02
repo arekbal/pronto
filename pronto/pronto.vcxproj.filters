@@ -63,10 +63,13 @@
     <ClInclude Include="commands\set_command.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="env_vars.hpp">
+    <ClInclude Include="env.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="env.hpp">
+    <ClInclude Include="utils\str.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\exec.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

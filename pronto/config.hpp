@@ -3,13 +3,15 @@
 #include <filesystem>
 #include <optional>
 #include <stdlib.h>
+#include <optional>
 
 #include "deps/cpptoml.hpp"
 
 #include "compiler_toolchains.hpp"
 
 #include "utils/result.hpp"
-#include "env_vars.hpp"
+#include "env.hpp"
+#include "console.hpp"
 
 namespace pronto
 {
@@ -17,42 +19,92 @@ namespace pronto
 
   struct config
   {
-    result_fail<std::string> open()
+    static constexpr cstr const TOML_NOT_FOUND = "_pronto.toml have not been found.";
+    static constexpr cstr const TOML_ALREADY_LOADED = "_pronto.toml have already been loaded.";
+    static constexpr cstr const TOML_LOADED = "_pronto.toml have been loaded.";
+
+    env env_;
+    console console_;
+
+    std::filesystem::path path_;
+
+    bool loaded_;
+       
+    bool loaded() const { return loaded_; }
+
+    const std::filesystem::path& toml_path() const { return path_; }
+
+    config()    
     {
-      return result_fail<std::string>::fail("hello World");
+    }  
+    
+    void set_toolchain(compiler_toolchains toolchain)
+    {
+      auto str = compiler_toolchain_to_str(toolchain);
+
+      env_.set_toolchain(str);
     }
+
+    std::vector<std::string>&& list_toolchains()
+    {
+      return { "msvc", "intel", "clang", "gcc", "borland" };
+    }
+
+    result_err<std::string> load(const std::filesystem::path& path)
+    {
+      if (loaded_)
+      {
+        console_.inf(TOML_ALREADY_LOADED);
+        return ok();
+      }
+
+      auto toml_path_l = find_toml(path);
+
+      if (!toml_path_l.has_value())
+      {
+        console_.err(TOML_NOT_FOUND);
+        return fail(std::string(TOML_NOT_FOUND));
+      }
+
+      path_ = toml_path_l.value();
+
+      try
+      {
+        auto config_file = cpptoml::parse_file(path_.string());
+        auto gl_version = config_file->get_qualified_as<std::string>("dependencies.gl");
+      }
+      catch (cpptoml::parse_exception& ex)
+      {
+        std::string s = "toml config: ";
+        s += ex.what();
+        console_.err(s.c_str());
+        return fail(s);
+      }
+
+      loaded_ = true;
+      console_.inf(TOML_LOADED);
+      return ok();
+    }
+
+    result_err<std::string> load() { return load(std::filesystem::current_path()); }
 
     compiler_toolchains toolchain() {
 
-      std::string toolchain_l(::std::getenv(env_vars::toolchain));
-
-      if (toolchain_l.compare("msvc") == 0) return compiler_toolchains::msvc;
-      if (toolchain_l.compare("intel") == 0) return compiler_toolchains::intel;
-      if (toolchain_l.compare("clang") == 0) return compiler_toolchains::clang;
-      if (toolchain_l.compare("gcc") == 0) return compiler_toolchains::gcc;
-      return compiler_toolchains::unknown;
+      auto o_toolchain = compiler_toolchain_from(env_.toolchain());
+      if (o_toolchain.has_value())
+        return o_toolchain.value();
+      else
+        return compiler_toolchains::clang;
     }
 
-    void set_toolchain(compiler_toolchains toolchain)
+  private:
+
+    std::optional<fs::path> find_toml(const std::filesystem::path& path)
     {
-      std::string s;
-
-      if (toolchain == compiler_toolchains::msvc) s = "msvc";
-      else if (toolchain == compiler_toolchains::intel) s = "intel";
-      else if (toolchain == compiler_toolchains::clang) s = "clang";
-      else if (toolchain == compiler_toolchains::gcc) s = "gcc";
-      else s = "";
-
-      ::setenv(env_vars::toolchain, s.c_str(), true);
-    }
-
-    std::optional<fs::path> find_toml()
-    {
-      auto path = fs::current_path();
-
+      auto path_l = path;
       do
-      {
-        auto filepath = path;
+      {        
+        auto filepath = path_l;
         filepath /= "_pronto.toml";
 
         if (fs::exists(filepath))
@@ -60,14 +112,14 @@ namespace pronto
           return filepath;
         }
 
-        if (!path.has_parent_path())
+        if (!path_l.has_parent_path())
         {
           return {};
         }
 
-        path = path.parent_path();
+        path_l = path_l.parent_path();
 
-      } loop;
+      } while(true);
     }
   };
 }

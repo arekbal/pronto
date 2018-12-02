@@ -7,7 +7,7 @@
 #include "../config.hpp"
 #include "../compiler_toolchains.hpp"
 #include "../core.hpp"
-#include "../env_vars.hpp"
+#include "../env.hpp"
 
 namespace pronto::commands
 {
@@ -33,9 +33,9 @@ namespace pronto::commands
         iter++;
         if (iter == end) return 0;
 
-        auto& next = *iter;
+        auto& tc_name = *iter;                
 
-        setenv(env_vars::toolchain, next.c_str(), true);
+        //setenv(env::toolchain, next.c_str(), true);
 
         //std::string s = 
 

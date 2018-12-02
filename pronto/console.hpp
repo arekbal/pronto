@@ -65,7 +65,7 @@ namespace pronto
     }
 
   public:
-    void err(readonly cstr s) const
+    void err(const cstr s) const
     {
       set_color(color_mode::fore, 255u, 148u, 21u);
 
@@ -75,7 +75,7 @@ namespace pronto
       std::cout.write("\n", 1);
     }
 
-    void inf(readonly cstr s) const
+    void inf(const cstr s) const
     {
       set_color(color_mode::fore, 255u, 255u, 255u);
 
