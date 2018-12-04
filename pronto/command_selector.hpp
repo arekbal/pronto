@@ -18,10 +18,10 @@ namespace pronto
     std::vector<std::string> tokens_;
 
     std::variant<
-      commands::build_command,
+      commands::build_command<>,
       commands::run_command,
-      commands::get_command,
-      commands::set_command,
+      commands::get_command<>,
+      commands::set_command<>,
       commands::help_command>
       selected_;
 
@@ -34,10 +34,10 @@ namespace pronto
       if (tokens_.size() > 0)
       {        
         auto token = tokens_[0];
-        if (0 == token.compare(commands::build_command::command_name)) selected_.emplace<commands::build_command>();
+        if (0 == token.compare(commands::build_command<>::command_name)) selected_.emplace<commands::build_command<>>();
         else if (0 == token.compare(commands::run_command::command_name)) selected_.emplace<commands::run_command>();
-        else if (0 == token.compare(commands::get_command::command_name)) selected_.emplace<commands::get_command>();
-        else if (0 == token.compare(commands::set_command::command_name)) selected_.emplace<commands::set_command>();
+        else if (0 == token.compare(commands::get_command<>::command_name)) selected_.emplace<commands::get_command<>>();
+        else if (0 == token.compare(commands::set_command<>::command_name)) selected_.emplace<commands::set_command<>>();
         else
           selected_.emplace<commands::help_command>();
       }

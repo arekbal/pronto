@@ -17,14 +17,15 @@ namespace pronto
 {
   namespace fs = std::filesystem;
 
+  template<class env_t=env, class console_t=console>
   struct config
   {
     static constexpr cstr const TOML_NOT_FOUND = "_pronto.toml have not been found.";
     static constexpr cstr const TOML_ALREADY_LOADED = "_pronto.toml have already been loaded.";
     static constexpr cstr const TOML_LOADED = "_pronto.toml have been loaded.";
 
-    env env_;
-    console console_;
+    env_t env_;
+    console_t console_;
 
     std::filesystem::path path_;
 

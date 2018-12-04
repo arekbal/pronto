@@ -153,20 +153,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="commands\base_command.hpp" />
     <ClInclude Include="env.hpp" />
     <ClInclude Include="commands\get_command.hpp" />
     <ClInclude Include="commands\set_command.hpp" />
     <ClInclude Include="console.hpp" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="commands\help_command.hpp" />
-    <ClInclude Include="commands\init_command.h" />
+    <ClInclude Include="commands\init_command.hpp" />
     <ClInclude Include="command_selector.hpp" />
     <ClInclude Include="commands\build_command.hpp" />
     <ClInclude Include="commands\run_command.hpp" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="deps\cpptoml.hpp" />
     <ClInclude Include="config.hpp" />
-    <ClInclude Include="utils\exec.hpp" />
+    <ClInclude Include="process.hpp" />
     <ClInclude Include="utils\result.hpp" />
     <ClInclude Include="utils\span.hpp" />
     <ClInclude Include="compiler_toolchains.hpp" />

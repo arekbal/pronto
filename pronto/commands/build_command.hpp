@@ -1,24 +1,30 @@
 #pragma once
 
+#include "base_command.hpp"
+
 #include "../utils/span.hpp"
 #include "../console.hpp"
 #include "../config.hpp"
 #include "../utils/str.hpp"
+#include "../process.hpp"
 
 namespace pronto::commands
-{ 
-  struct build_command
+{   
+  template<typename env_t = env, typename console_t=console, typename process_t=process<console_t>, typename config_t=config<env_t, console_t> >
+  struct build_command : base_command<build_command<env_t, console_t, process_t, config_t> >
   {
+    friend class base_command<build_command>;
+
     static constexpr cstr const command_name = "build";
 
   private:   
 
-    console console_;
-    config config_;
+    console_t console_;
+    config_t config_;
+    process_t proc_;
 
-  public:  
-
-    int execute(const utils::cspan_vec_s command_args)
+  private:
+    int on_execute(const utils::cspan_vec_s command_args)
     {
       if (command_args.empty())
       {
@@ -39,7 +45,7 @@ namespace pronto::commands
       {
         auto res = config_.load(first);
 
-
+        auto result = proc_.run("cargo");
 
         return 0;
       }

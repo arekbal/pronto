@@ -5,13 +5,12 @@
 
 namespace pronto::commands
 {
-  struct init_command
+  template<typename t>
+  struct base_command
   {
-    constexpr static const char* readonly command_name = "init";
-
     int execute(utils::cspan_vec_s commandArgs)
     {
-      return 0;
+      return static_cast<t*>(this)->on_execute(commandArgs);
     }
   };
 }

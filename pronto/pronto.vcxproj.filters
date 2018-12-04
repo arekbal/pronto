@@ -36,9 +36,6 @@
     <ClInclude Include="utils\span.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="commands\init_command.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="console.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -69,7 +66,13 @@
     <ClInclude Include="utils\str.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="utils\exec.hpp">
+    <ClInclude Include="commands\base_command.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="commands\init_command.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="process.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

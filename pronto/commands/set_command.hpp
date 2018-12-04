@@ -1,8 +1,9 @@
 #pragma once
 
+#include "base_command.hpp"
+
 #include <vector>
 #include "../utils/span.hpp"
-
 #include "../console.hpp"
 #include "../config.hpp"
 #include "../compiler_toolchains.hpp"
@@ -11,15 +12,20 @@
 
 namespace pronto::commands
 {
-  struct set_command
+  template<typename env_t=env, typename console_t=console, typename config_t=config<env_t, console_t> >
+  struct set_command : base_command<set_command<env_t, console_t, config_t> >
   {
+    friend class base_command<set_command>;
+
     constexpr static const char* readonly command_name = "set";
 
-    console console_;
+  private:
+    console_t console_;
 
-    config config_;
+    config_t config_;
 
-    int execute(utils::cspan_vec_s commandArgs)
+  private:
+    int on_execute(utils::cspan_vec_s commandArgs)
     {
       auto iter = commandArgs.begin();
       auto end = commandArgs.end();
