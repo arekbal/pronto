@@ -8,24 +8,27 @@
 #include "../utils/str.hpp"
 #include "../process.hpp"
 
-#include "../toolchains/msvc_toolchain.hpp"
+#include "../toolchains/msvc.hpp"
 
 namespace pronto::commands
 {   
-  template<typename env_t = env, typename console_t=console, typename process_t=process<console_t>, typename config_t=config<env_t, console_t> >
+  template<
+    typename env_t = env, 
+    typename console_t = console, 
+    typename process_t = process<console_t>, 
+    typename config_t = config<env_t, console_t> >
   struct build_command : base_command<build_command<env_t, console_t, process_t, config_t> >
   {
     friend struct base_command<build_command>;
 
-    static constexpr cstr const command_name = "build";
+    static constexpr const char* const command_name = "build";
 
-  private:   
+  private:
 
     console_t console_;
     config_t config_;
     process_t proc_;
 
-  private:
     int on_execute(const utils::cspan_vec_s command_args)
     {
       if (command_args.empty())
@@ -44,8 +47,8 @@ namespace pronto::commands
         {
           case toolchains::toolchain_names::msvc:
           {
-            toolchains::msvc_toolchain<console_t, process_t> msvc;
-            return msvc.run(config_.toml_path());
+            toolchains::msvc::toolchain<console_t, process_t> msvc;
+            return msvc.run(config_.toml_path(), toolchains::msvc::compiler::x64, toolchains::msvc::target::x64);
           }
           default:
             console_.err("currently unsupported toolkit");
@@ -76,8 +79,8 @@ namespace pronto::commands
         switch (toolchain)
         {
           case toolchains::toolchain_names::msvc:
-            toolchains::msvc_toolchain<console_t, process_t> msvc;
-            return msvc.run(config_.toml_path());
+            toolchains::msvc::toolchain<console_t, process_t> msvc;
+            return msvc.run(config_.toml_path(), toolchains::msvc::compiler::x64, toolchains::msvc::target::x64);
           default:
             console_.err("currently unsupported toolkit");
             return -1;

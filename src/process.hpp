@@ -17,7 +17,7 @@ namespace pronto
 #ifdef _WIN32 
 
       
-      auto wcmd = str::str2wstr(cmd);
+      auto wcmd = str::utf8_to_utf16(cmd);
 
       std::string str_result = "";
       HANDLE h_out_pipe_read, h_out_pipe_write;
@@ -93,31 +93,31 @@ namespace pronto
         if(!str_result.empty())
           console_.inf(str_result.c_str());
 
-        // Even if process exited - we continue reading, if there is some data available over pipe.
-        for (;;)
-        {
-          char buf[1024];
-          DWORD dw_read = 0;
-          DWORD dw_avail = 0;
+        //// Even if process exited - we continue reading, if there is some data available over pipe.
+        //for (;;)
+        //{
+        //  char buf[1024];
+        //  DWORD dw_read = 0;
+        //  DWORD dw_avail = 0;
 
-          if (!::PeekNamedPipe(h_out_pipe_read, NULL, 0, NULL, &dw_avail, NULL))
-            break;
+        //  if (!::PeekNamedPipe(h_out_pipe_read, NULL, 0, NULL, &dw_avail, NULL))
+        //    break;
 
-          if (!dw_avail) // no data available, return
-            break;
+        //  if (!dw_avail) // no data available, return
+        //    break;
 
-          read_file_result = ::ReadFile(h_out_pipe_read, buf, min(sizeof(buf) - 1, dw_avail), &dw_read, NULL);
+        //  read_file_result = ::ReadFile(h_out_pipe_read, buf, min(sizeof(buf) - 1, dw_avail), &dw_read, NULL);
 
-          if (!read_file_result || !dw_read)
-            // error, the child process might ended
-            break;
+        //  if (!read_file_result || !dw_read)
+        //    // error, the child process might ended
+        //    break;
 
-          buf[dw_read] = 0;
-          str_result += buf;
-        }
+        //  buf[dw_read] = 0;
+        //  str_result += buf;
+        //}
 
-        if (!str_result.empty())
-          console_.inf(str_result.c_str());
+        //if (!str_result.empty())
+        //  console_.inf(str_result.c_str());
 
         str_result.clear();
 

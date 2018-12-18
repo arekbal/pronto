@@ -58,13 +58,13 @@ namespace pronto::utils
   }
 
   template <class iter_t>
-  static auto make_cspan(readonly iter_t begin, readonly iter_t end)
+  static auto make_cspan(const iter_t begin, const iter_t end)
   {
     return span<iter_t>(begin, end);
   }
 
   template <class item_t>
-  static auto make_span(readonly std::vector<item_t>& items)
+  static auto make_span(const std::vector<item_t>& items)
   {
     return span<std::vector<item_t>::iterator>(items.begin(), items.end());
   }
@@ -87,7 +87,7 @@ namespace pronto::utils
   template <class item_t>
   static auto make_cspan(std::vector<item_t>& items, u32 start)
   {
-    start = int(items.size() - start) > -1 ? start : items.size();
+    start = i32(items.size() - start) > -1 ? start : items.size();
     auto begin = items.cbegin();
     begin += start;
     return span<std::vector<item_t>::const_iterator>(begin, items.cend());

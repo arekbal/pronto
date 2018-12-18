@@ -48,9 +48,6 @@
     <ClInclude Include="config.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="utils\result.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="commands\get_command.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -72,13 +69,16 @@
     <ClInclude Include="process.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="toolchains\msvc_toolchain.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="toolchains\toolchain_names.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="toolchains\win32reg.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="result.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="toolchains\msvc.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -89,5 +89,13 @@
     <ClCompile Include="pronto.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icudt63.dll" />
+    <None Include="icuin63.dll" />
+    <None Include="icuio63.dll" />
+    <None Include="icutest63.dll" />
+    <None Include="icutu63.dll" />
+    <None Include="icuuc63.dll" />
   </ItemGroup>
 </Project>

@@ -84,5 +84,15 @@ namespace pronto
       reset_color();
       std::cout.write("\n", 1);
     }
+
+    void wrn(const cstr s) const
+    {
+      set_color(color_mode::fore, 255u, 224u, 89u);
+
+      std::cout.write(s, std::strlen(s));
+
+      reset_color();
+      std::cout.write("\n", 1);
+    }
   };
 }

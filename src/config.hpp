@@ -9,7 +9,7 @@
 
 #include "toolchains/toolchain_names.hpp"
 
-#include "utils/result.hpp"
+#include "result.hpp"
 #include "env.hpp"
 #include "console.hpp"
 
@@ -26,6 +26,7 @@ namespace pronto
     static constexpr cstr const COMPILATION_TOOLCHAIN = "compilation.toolchain";
     static constexpr cstr const TOML_FILE_NAME = "_pronto.toml";
 
+  private:
     env_t env_;
     console_t console_;
 
@@ -34,7 +35,8 @@ namespace pronto
     std::shared_ptr<cpptoml::table> config_file_;
 
     bool loaded_;
-       
+
+  public:
     bool loaded() const { return loaded_; }
 
     const fs::path& toml_path() const { return path_; }
@@ -59,7 +61,7 @@ namespace pronto
     {
       if (loaded_)
       {
-        console_.inf(TOML_ALREADY_LOADED);
+        console_.wrn(TOML_ALREADY_LOADED);
         return ok();
       }
 
@@ -67,8 +69,7 @@ namespace pronto
 
       if (!toml_path_l.has_value())
       {
-        console_.err(TOML_NOT_FOUND);
-        return fail(std::string(TOML_NOT_FOUND));
+        return fail<std::string>(TOML_NOT_FOUND);
       }
 
       path_ = toml_path_l.value();
@@ -81,8 +82,8 @@ namespace pronto
       {
         std::string s = "toml config: ";
         s += ex.what();
-        console_.err(s.c_str());
-        return fail(s);
+
+        return fail<std::string>(s);
       }
 
       loaded_ = true;

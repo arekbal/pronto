@@ -10,7 +10,7 @@ namespace pronto::commands
   {
     friend struct base_command<help_command>;
 
-    constexpr static const char* readonly command_name = "help";
+    constexpr static const char* const command_name = "help";
 
   private:
     int on_execute(utils::cspan_vec_s commandArgs)

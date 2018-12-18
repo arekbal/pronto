@@ -1,6 +1,0 @@
-max_width = 100
-tab_spaces = 2
-hard_tabs = false
-control_brace_style = "AlwaysNextLine"
-brace_style = "AlwaysNextLine"
-fn_single_line = true

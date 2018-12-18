@@ -15,7 +15,7 @@ namespace pronto::commands
   {
     friend struct base_command<get_command>;
 
-    constexpr static const char* readonly command_name = "get";
+    static constexpr const char* const command_name = "get";
 
     console_t console_;
 

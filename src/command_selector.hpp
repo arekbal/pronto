@@ -47,9 +47,9 @@ namespace pronto
 
     int execute()
     {      
-      auto cmdArgs = utils::make_cspan(tokens_, 1);
+      auto cmd_args = utils::make_cspan(tokens_, 1);
      
-      return std::visit([=] (auto& cmd) -> int { return cmd.execute(cmdArgs); }, selected_);
+      return std::visit([=] (auto& cmd) -> int { return cmd.execute(cmd_args); }, selected_);
     }
 
   private:

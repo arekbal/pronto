@@ -1,6 +1,18 @@
 #pragma once
 
 #include <string>
+#include <optional>
+
+#include <stdio.h>
+
+
+#include <unicode/utypes.h>
+#include <unicode/uchar.h>
+#include <unicode/locid.h>
+#include <unicode/ustring.h>
+#include <unicode/ucnv.h>
+#include <unicode/unistr.h>
+
 
 namespace pronto::str
 {
@@ -8,6 +20,8 @@ namespace pronto::str
 
   std::wstring utf8_to_utf16(const std::string& utf8)
   {
+    // TODO: replace with icu code
+
     std::vector<unsigned long> unicode;
     size_t i = 0;
     while (i < utf8.size())
@@ -85,108 +99,28 @@ namespace pronto::str
     return s.compare(0, seq.length(), seq) == 0;
   }
 
-  std::wstring str2wstr(const std::string& str)
+  std::string utf16_to_utf8(const std::wstring& widestring)
   {
-    //using convert_typeX = std::codecvt_utf8<wchar_t>;
-    //std::wstring_convert<convert_typeX, wchar_t> converterX;
+    (widestring);
     
-    //return converterX.from_bytes(str);
+    icu::UnicodeString str(widestring.c_str());
 
-    return utf8_to_utf16(str);
+    std::string s;
+    str.toUTF8String(s);
+
+    return s;
+    //std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> conversion;
+    //return conversion.to_bytes(u"\u4f60\u597d");
   }
 
-  //std::wstring FromUtf8(const std::string& utf8string)
-  //{
-  //  size_t widesize = utf8string.length();
-  //  if (sizeof(wchar_t) == 2)
-  //  {
-  //    std::wstring resultstring;
-  //    resultstring.resize(widesize + 1, L'\0');
-  //    const UTF8* sourcestart = reinterpret_cast<const UTF8*>(utf8string.c_str());
-  //    const UTF8* sourceend = sourcestart + widesize;
-  //    UTF16* targetstart = reinterpret_cast<UTF16*>(&resultstring[0]);
-  //    UTF16* targetend = targetstart + widesize;
-  //    ConversionResult res = ConvertUTF8toUTF16
-  //    (&sourcestart, sourceend, &targetstart, targetend, strictConversion);
-  //    if (res != conversionOK)
-  //    {
-  //      throw std::exception("La falla!");
-  //    }
-  //    *targetstart = 0;
-  //    return resultstring;
-  //  }
-  //  else if (sizeof(wchar_t) == 4)
-  //  {
-  //    std::wstring resultstring;
-  //    resultstring.resize(widesize + 1, L'\0');
-  //    const UTF8* sourcestart = reinterpret_cast<const UTF8*>(utf8string.c_str());
-  //    const UTF8* sourceend = sourcestart + widesize;
-  //    UTF32* targetstart = reinterpret_cast<UTF32*>(&resultstring[0]);
-  //    UTF32* targetend = targetstart + widesize;
-  //    ConversionResult res = ConvertUTF8toUTF32
-  //    (&sourcestart, sourceend, &targetstart, targetend, strictConversion);
-  //    if (res != conversionOK)
-  //    {
-  //      throw std::exception("La falla!");
-  //    }
-  //    *targetstart = 0;
-  //    return resultstring;
-  //  }
-  //  else
-  //  {
-  //    throw std::exception("La falla!");
-  //  }
-  //  return L"";
-  //}
-
-  //std::string ToUtf8(const std::wstring& widestring)
-  //{
-  //  size_t widesize = widestring.length();
-
-  //  if (sizeof(wchar_t) == 2)
-  //  {
-  //    size_t utf8size = 3 * widesize + 1;
-  //    std::string resultstring;
-  //    resultstring.resize(utf8size, '\0');
-  //    const wchar_t* sourcestart =
-  //      reinterpret_cast<const wchar_t*>(widestring.c_str());
-  //    const wchar_t* sourceend = sourcestart + widesize;
-  //    UTF8* targetstart = reinterpret_cast<UTF8*>(&resultstring[0]);
-  //    UTF8* targetend = targetstart + utf8size;
-  //    ConversionResult res = ConvertUTF16toUTF8
-  //    (&sourcestart, sourceend, &targetstart, targetend, strictConversion);
-  //    if (res != conversionOK)
-  //    {
-  //      throw std::exception("La falla!");
-  //    }
-  //    *targetstart = 0;
-  //    return resultstring;
-  //  }
-  //  else if (sizeof(wchar_t) == 4)
-  //  {
-  //    size_t utf8size = 4 * widesize + 1;
-  //    std::string resultstring;
-  //    resultstring.resize(utf8size, '\0');
-  //    const UTF32* sourcestart =
-  //      reinterpret_cast<const UTF32*>(widestring.c_str());
-  //    const UTF32* sourceend = sourcestart + widesize;
-  //    UTF8* targetstart = reinterpret_cast<UTF8*>(&resultstring[0]);
-  //    UTF8* targetend = targetstart + utf8size;
-  //    ConversionResult res = ConvertUTF32toUTF8
-  //    (&sourcestart, sourceend, &targetstart, targetend, strictConversion);
-  //    if (res != conversionOK)
-  //    {
-  //      throw std::exception("La falla!");
-  //    }
-  //    *targetstart = 0;
-  //    return resultstring;
-  //  }
-  //  else
-  //  {
-  //    throw std::exception("La falla!");
-  //  }
-  //  return "";
-  //}
+  std::optional<double> str_to_double(std::string& s)
+  {
+    std::istringstream i(s);
+    double x;
+    if (!(i >> x))
+      return {};
+    return x;
+  }
 
   //std::string wstr2str(const std::wstring& wstr)
   //{

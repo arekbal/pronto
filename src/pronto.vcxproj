@@ -92,25 +92,30 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>F:\LIBS\icu4c-63_1-src\icu\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>F:\LIBS\icu4c-63_1-src\icu\lib\icudt.lib;F:\LIBS\icu4c-63_1-src\icu\lib\icuin.lib;F:\LIBS\icu4c-63_1-src\icu\lib\icuuc.lib;F:\LIBS\icu4c-63_1-src\icu\lib\icutu.lib;F:\LIBS\icu4c-63_1-src\icu\lib\icuio.lib;F:\LIBS\icu4c-63_1-src\icu\lib\icutest.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>F:\LIBS\icu4c-63_1-src\icu\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>F:\LIBS\icu4c-63_1-src\icu\lib64\icudt.lib;F:\LIBS\icu4c-63_1-src\icu\lib64\icuin.lib;F:\LIBS\icu4c-63_1-src\icu\lib64\icuuc.lib;F:\LIBS\icu4c-63_1-src\icu\lib64\icutu.lib;F:\LIBS\icu4c-63_1-src\icu\lib64\icuio.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -125,18 +130,20 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>F:\LIBS\icu4c-63_1-src\icu\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>F:\LIBS\icu4c-63_1-src\icu\lib\icudt.lib;F:\LIBS\icu4c-63_1-src\icu\lib\icuin.lib;F:\LIBS\icu4c-63_1-src\icu\lib\icuuc.lib;F:\LIBS\icu4c-63_1-src\icu\lib\icutu.lib;F:\LIBS\icu4c-63_1-src\icu\lib\icuio.lib;F:\LIBS\icu4c-63_1-src\icu\lib\icutest.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -144,16 +151,19 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>F:\LIBS\icu4c-63_1-src\icu\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>F:\LIBS\icu4c-63_1-src\icu\lib64\icudt.lib;F:\LIBS\icu4c-63_1-src\icu\lib64\icuin.lib;F:\LIBS\icu4c-63_1-src\icu\lib64\icuuc.lib;F:\LIBS\icu4c-63_1-src\icu\lib64\icutu.lib;F:\LIBS\icu4c-63_1-src\icu\lib64\icuio.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="toolchains\msvc_toolchain.hpp" />
+    <ClInclude Include="toolchains\msvc.hpp" />
     <ClInclude Include="commands\base_command.hpp" />
     <ClInclude Include="env.hpp" />
     <ClInclude Include="commands\get_command.hpp" />
@@ -170,7 +180,7 @@
     <ClInclude Include="config.hpp" />
     <ClInclude Include="process.hpp" />
     <ClInclude Include="toolchains\win32reg.hpp" />
-    <ClInclude Include="utils\result.hpp" />
+    <ClInclude Include="result.hpp" />
     <ClInclude Include="utils\span.hpp" />
     <ClInclude Include="toolchains\toolchain_names.hpp" />
     <ClInclude Include="utils\str.hpp" />
@@ -183,6 +193,26 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="pronto.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icudt63.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="icuin63.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="icuio63.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="icutest63.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="icutu63.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="icuuc63.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
