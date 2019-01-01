@@ -4,11 +4,11 @@
 #include <vector>
 #include <optional>
 
-#include "../utils/str.hpp"
+#include "../../utils/str.hpp"
 
-#include "../result.hpp"
+#include "../../result.hpp"
 
-namespace pronto::toolchains::win32reg
+namespace pronto::toolchains::msvc::win32reg
 {
   enum class reg_key_access
   {
@@ -143,17 +143,15 @@ namespace pronto::toolchains::win32reg
         return reg_key(HKEY_USERS);
       }
 
-      //static result<reg_key, LSTATUS> impersonated_curr_user(reg_key_access access = reg_key_access::read)
-      //{
-      //  HKEY h_key;
-      //  auto status = ::RegOpenCurrentUser((REGSAM)access, &h_key);
-      //  if (ERROR_SUCCESS == status)
-      //  {
-      //    return ok(reg_key(h_key));
-      //  }
+      static result<reg_key, LSTATUS> impersonated_curr_user(reg_key_access access = reg_key_access::read)
+      {
+        HKEY h_key;
+        auto status = ::RegOpenCurrentUser((REGSAM)access, &h_key);
+        if (ERROR_SUCCESS == status)
+          return reg_key(h_key);
 
-      //  return fail<LSTATUS>(status);
-      //}
+        return status;
+      }
     };
   
     result<reg_key, LSTATUS> get_subkey(const std::string& s, reg_key_access access=reg_key_access::read)
@@ -163,9 +161,7 @@ namespace pronto::toolchains::win32reg
       HKEY h_key;
       auto status = ::RegOpenKeyExW(h_key_, ws.c_str(), 0, (REGSAM)access, &h_key);
       if (ERROR_SUCCESS == status)
-      {       
         return reg_key(h_key);
-      }
 
       return status;
     }
@@ -181,7 +177,7 @@ namespace pronto::toolchains::win32reg
       DWORD index = 0;
       while (true)
       {
-        enumerate_keys_result = ::RegEnumKeyW(h_key_, index, buff.data(), buff.capacity());
+        enumerate_keys_result = ::RegEnumKeyW(h_key_, index, buff.data(), (DWORD)buff.capacity());
 
         index++;
 
@@ -268,9 +264,7 @@ namespace pronto::toolchains::win32reg
         &buff_size);
 
       if (ERROR_SUCCESS == status)
-      {
         return res;
-      }
 
       return status;
     }

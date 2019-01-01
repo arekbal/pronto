@@ -1,6 +1,7 @@
 #pragma once
 
 #include <windows.h>
+#include <shlwapi.h>
 #include <string>
 
 #include "utils/str.hpp"
@@ -12,12 +13,17 @@ namespace pronto
   {
     console_t console_;
 
-    int run(const std::string& cmd)
+    int run(const std::string& cmd, bool expand_env_vars=true)
     {
-#ifdef _WIN32 
+#ifdef _WIN32
+     /* BOOL PathUnExpandEnvStringsA(
+        LPCSTR pszPath,
+        LPSTR  pszBuf,
+        UINT   cchBuf
+      );*/
 
-      
       auto wcmd = str::utf8_to_utf16(cmd);
+      std::wstring wstr(5000, 0);
 
       std::string str_result = "";
       HANDLE h_out_pipe_read, h_out_pipe_write;
@@ -40,14 +46,19 @@ namespace pronto
         return create_pipe_result;
 
       STARTUPINFO si = { sizeof(STARTUPINFO) };
-      si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
+      si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;      
       si.hStdOutput = h_out_pipe_write;
       si.hStdError = h_err_pipe_write;
       si.wShowWindow = SW_HIDE;       // Prevents cmd window from flashing. Requires STARTF_USESHOWWINDOW in dwFlags.
-
+      
       PROCESS_INFORMATION pi = { 0 };
 
-      BOOL create_proc_result = ::CreateProcessW(NULL, (LPWSTR)wcmd.c_str(), NULL, NULL, TRUE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
+      //::ExpandEnvironmentStrings()
+
+      BOOL create_proc_result = ::CreateProcessW(NULL, (LPWSTR)wcmd.c_str(), NULL, NULL, TRUE, 
+        // NULL
+         CREATE_NEW_CONSOLE | CREATE_UNICODE_ENVIRONMENT
+        , NULL, NULL, &si, &pi);
       if (!create_proc_result)
       {
         ::CloseHandle(h_out_pipe_write);

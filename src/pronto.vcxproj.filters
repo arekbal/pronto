@@ -72,13 +72,34 @@
     <ClInclude Include="toolchains\toolchain_names.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="toolchains\win32reg.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="result.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="toolchains\msvc.hpp">
+    <ClInclude Include="toolchains\msvc\win32reg.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="toolchains\msvc\cl_args.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="toolchains\msvc\msvc_toolchain.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="toolchains\clang\clang_toolchain.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\tests.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\str_tests.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="toolchains\toolchain_config.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="toolchains\compiler.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="toolchains\target.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -86,7 +107,7 @@
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="pronto.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

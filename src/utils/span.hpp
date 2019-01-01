@@ -87,7 +87,7 @@ namespace pronto::utils
   template <class item_t>
   static auto make_cspan(std::vector<item_t>& items, u32 start)
   {
-    start = i32(items.size() - start) > -1 ? start : items.size();
+    start = i64(items.size() - start) > -1 ? start : items.size();
     auto begin = items.cbegin();
     begin += start;
     return span<std::vector<item_t>::const_iterator>(begin, items.cend());

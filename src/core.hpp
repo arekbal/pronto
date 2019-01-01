@@ -13,8 +13,8 @@ using i64 = int64_t;
 using u64 = uint64_t;
 using f32 = float;
 using f64 = double;
-using cstr = const char*;
-using str = std::string;
+//using cstr = const char*;
+//using str = std::string;
 
 //#define elif else if
 //#define loop while(true)

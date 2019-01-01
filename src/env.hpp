@@ -13,6 +13,7 @@ namespace pronto
     constexpr static const char* const TOOLCHAIN = "PRONTO_TOOLCHAIN";
     constexpr static const char* const TARGET = "PRONTO_TARGET";
     constexpr static const char* const INSTALL_DIR = "PRONTO_INSTALL_DIR";
+    constexpr static const char* const PATH = "PATH";
 
     void set_toolchain(std::string val)
     {
@@ -41,7 +42,12 @@ namespace pronto
     {
       return get(INSTALL_DIR);
     }
-    
+
+    std::string path()
+    {
+      return get(PATH);
+    }
+   
   private:
     // not thread-safe could use 'getenv' internally which could invalidate returned ptr on subsequent calls.
     std::string get(const char* name)

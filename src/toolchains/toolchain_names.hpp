@@ -12,12 +12,14 @@ namespace pronto::toolchains {
     intel,
     clang,
     msvc,
+    mingw,
     gcc,
   };
 
   std::optional<toolchain_names> toolchain_from(std::string str)
   {      
     if (str.compare("msvc") == 0) return toolchain_names::msvc;
+    if (str.compare("mingw") == 0) return toolchain_names::mingw;
     if (str.compare("intel") == 0) return toolchain_names::intel;
     if (str.compare("clang") == 0) return toolchain_names::clang;
     if (str.compare("gcc") == 0) return toolchain_names::gcc;
@@ -30,6 +32,7 @@ namespace pronto::toolchains {
     std::string s;
 
     if (toolchain == toolchain_names::msvc) s = "msvc";
+    else if (toolchain == toolchain_names::mingw) s = "mingw";
     else if (toolchain == toolchain_names::intel) s = "intel";
     else if (toolchain == toolchain_names::clang) s = "clang";
     else if (toolchain == toolchain_names::gcc) s = "gcc";

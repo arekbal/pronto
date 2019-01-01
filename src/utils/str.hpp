@@ -2,9 +2,11 @@
 
 #include <string>
 #include <optional>
+#include <regex>
+#include <algorithm>
+#include <filesystem>
 
 #include <stdio.h>
-
 
 #include <unicode/utypes.h>
 #include <unicode/uchar.h>
@@ -13,10 +15,17 @@
 #include <unicode/ucnv.h>
 #include <unicode/unistr.h>
 
-
 namespace pronto::str
 {
-  std::string empty_string = "";
+  const std::string empty_string = "";
+
+  const std::string reserved = "#$reserved$#";
+
+#if PLATFORM_WINDOWS
+  const std::string new_line = "\r\n";
+#else
+  const std::string new_line = "\n";
+#endif
 
   std::wstring utf8_to_utf16(const std::string& utf8)
   {
@@ -93,6 +102,73 @@ namespace pronto::str
     return utf16;
   }
 
+  void replace_all(std::string& str, const std::string& from, const std::string& to) {
+    size_t pos = str.find(from);
+
+    while (true)
+    {
+      if (pos == std::string::npos)
+        return;
+
+      str.replace(pos, from.length(), to);
+      pos += to.length();
+
+      pos = str.find(from, pos);
+    }
+  }
+
+  std::string wildcard_to_regex(const char* wildcard)
+  {
+    std::string inner_expr = wildcard;  
+
+    //replace_all(inner_expr, "\\", "\\\\");
+    replace_all(inner_expr, "|", "\\|");
+    replace_all(inner_expr, "?", "\\?");
+    replace_all(inner_expr, "+", "\\+");
+    replace_all(inner_expr, ".", "\\.");
+    replace_all(inner_expr, "^", "\\^");
+    replace_all(inner_expr, "$", "\\$");
+    replace_all(inner_expr, "(", "\\(");
+    replace_all(inner_expr, ")", "\\)");
+    
+    replace_all(inner_expr, "*", "(.*)");
+
+    if (inner_expr.find(reserved) != std::string::npos)
+      throw std::runtime_error("using reserved character sequence");
+
+    replace_all(inner_expr, "\\]", reserved);
+    replace_all(inner_expr, "]", "]*");
+    replace_all(inner_expr, reserved, "\\]");
+
+
+    std::string expr = "^";
+    expr += inner_expr;
+    expr += "$";
+    return expr;
+  }
+
+  bool wildcard_match(const char* wildcard, const std::string& c_str)
+  {
+    std::regex reg_expr(wildcard_to_regex(wildcard));
+
+    std::smatch m;
+    return std::regex_match(c_str, m, reg_expr);
+  }
+
+  bool wildcard_match(const char *wildcard, const char* c_str)
+  {
+    auto str = std::string(c_str);
+    return wildcard_match(wildcard, str);
+  }
+
+  bool wildcard_path_match(const char *wildcard, const std::filesystem::path& filepath)
+  {
+    auto str = filepath.u8string();
+
+    replace_all(str, "\\", "/");
+
+    return wildcard_match(wildcard, str);
+  }
 
   bool starts_with(const std::string& s, const std::string& seq)
   {
@@ -103,14 +179,11 @@ namespace pronto::str
   {
     (widestring);
     
-    icu::UnicodeString str(widestring.c_str());
-
+    icu::UnicodeString str(widestring.c_str());    
     std::string s;
     str.toUTF8String(s);
 
     return s;
-    //std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> conversion;
-    //return conversion.to_bytes(u"\u4f60\u597d");
   }
 
   std::optional<double> str_to_double(std::string& s)

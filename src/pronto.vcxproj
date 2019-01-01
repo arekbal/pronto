@@ -23,7 +23,7 @@
     <ProjectGuid>{B254AE46-A6C5-4E51-85C3-C027CEA4D627}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>pronto</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -72,9 +72,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>F:\LIBS\icu4c-63_1-src\icu\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>F:\LIBS\icu4c-63_1-src\icu\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>F:\LIBS\icu4c-63_1-src\icu\include;$(IncludePath)</IncludePath>
+    <LibraryPath>F:\LIBS\icu4c-63_1-src\icu\lib64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -97,7 +101,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>F:\LIBS\icu4c-63_1-src\icu\lib\icudt.lib;F:\LIBS\icu4c-63_1-src\icu\lib\icuin.lib;F:\LIBS\icu4c-63_1-src\icu\lib\icuuc.lib;F:\LIBS\icu4c-63_1-src\icu\lib\icutu.lib;F:\LIBS\icu4c-63_1-src\icu\lib\icuio.lib;F:\LIBS\icu4c-63_1-src\icu\lib\icutest.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>icudt.lib;icuin.lib;icuuc.lib;icutu.lib;icuio.lib;icutest.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -109,13 +113,15 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>F:\LIBS\icu4c-63_1-src\icu\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>F:\LIBS\icu4c-63_1-src\icu\lib64\icudt.lib;F:\LIBS\icu4c-63_1-src\icu\lib64\icuin.lib;F:\LIBS\icu4c-63_1-src\icu\lib64\icuuc.lib;F:\LIBS\icu4c-63_1-src\icu\lib64\icutu.lib;F:\LIBS\icu4c-63_1-src\icu\lib64\icuio.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>icudt.lib;icuin.lib;icuuc.lib;icutu.lib;icuio.lib;icutest.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ShowProgress>LinkVerboseLib</ShowProgress>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -148,7 +154,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>F:\LIBS\icu4c-63_1-src\icu\include</AdditionalIncludeDirectories>
@@ -163,7 +169,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="toolchains\msvc.hpp" />
+    <ClInclude Include="tests\str_tests.hpp" />
+    <ClInclude Include="tests\tests.hpp" />
+    <ClInclude Include="toolchains\clang\clang_toolchain.hpp" />
+    <ClInclude Include="toolchains\compiler.hpp" />
+    <ClInclude Include="toolchains\msvc\cl_args.hpp" />
+    <ClInclude Include="toolchains\msvc\msvc_toolchain.hpp" />
     <ClInclude Include="commands\base_command.hpp" />
     <ClInclude Include="env.hpp" />
     <ClInclude Include="commands\get_command.hpp" />
@@ -179,8 +190,10 @@
     <ClInclude Include="deps\cpptoml.hpp" />
     <ClInclude Include="config.hpp" />
     <ClInclude Include="process.hpp" />
-    <ClInclude Include="toolchains\win32reg.hpp" />
+    <ClInclude Include="toolchains\msvc\win32reg.hpp" />
     <ClInclude Include="result.hpp" />
+    <ClInclude Include="toolchains\target.hpp" />
+    <ClInclude Include="toolchains\toolchain_config.hpp" />
     <ClInclude Include="utils\span.hpp" />
     <ClInclude Include="toolchains\toolchain_names.hpp" />
     <ClInclude Include="utils\str.hpp" />
@@ -192,7 +205,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="pronto.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="icudt63.dll">
