@@ -4,9 +4,9 @@
 #include <vector>
 #include <optional>
 
-#include "../../utils/str.hpp"
+#include "../../utils/str.hh"
 
-#include "../../result.hpp"
+#include "../../result.hh"
 
 namespace pronto::toolchains::msvc::win32reg
 {

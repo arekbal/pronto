@@ -1,20 +1,20 @@
 #pragma once
 
-#include "base_command.hpp"
+#include "base_command.hh"
 
 
-#include "../utils/span.hpp"
-#include "../console.hpp"
-#include "../config.hpp"
-#include "../utils/str.hpp"
-#include "../process.hpp"
+#include "../utils/span.hh"
+#include "../console.hh"
+#include "../config.hh"
+#include "../utils/str.hh"
+#include "../process.hh"
 
-#include "../toolchains/compiler.hpp"
-#include "../toolchains/target.hpp"
-#include "../toolchains/toolchain_config.hpp"
+#include "../toolchains/compiler.hh"
+#include "../toolchains/target.hh"
+#include "../toolchains/toolchain_config.hh"
 
-#include "../toolchains/msvc/msvc_toolchain.hpp"
-#include "../toolchains/clang/clang_toolchain.hpp"
+#include "../toolchains/msvc/msvc_toolchain.hh"
+#include "../toolchains/clang/clang_toolchain.hh"
 
 
 namespace pronto::commands
@@ -94,6 +94,9 @@ namespace pronto::commands
       std::vector<std::string> sources = {};
 
       auto root = config_.root_path();
+
+
+      auto deps = config_.dependencies();
 
       for (const auto& entry : fs::recursive_directory_iterator(root))
       {

@@ -1,5 +1,5 @@
 [package]
-name = "doix"
+name = "pronto"
 version = "0.1.0"
 authors = ["arekbal <arek_bal@wp.pl>"]
 build = "build.rs"

@@ -106,13 +106,13 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>Create</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>pch.hh</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -148,7 +148,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>Create</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -156,7 +156,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>pch.hh</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>F:\LIBS\icu4c-63_1-src\icu\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -169,43 +169,49 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="tests\str_tests.hpp" />
-    <ClInclude Include="tests\tests.hpp" />
-    <ClInclude Include="toolchains\clang\clang_toolchain.hpp" />
-    <ClInclude Include="toolchains\compiler.hpp" />
-    <ClInclude Include="toolchains\msvc\cl_args.hpp" />
-    <ClInclude Include="toolchains\msvc\msvc_toolchain.hpp" />
-    <ClInclude Include="commands\base_command.hpp" />
-    <ClInclude Include="env.hpp" />
-    <ClInclude Include="commands\get_command.hpp" />
-    <ClInclude Include="commands\set_command.hpp" />
-    <ClInclude Include="console.hpp" />
-    <ClInclude Include="core.hpp" />
-    <ClInclude Include="commands\help_command.hpp" />
-    <ClInclude Include="commands\init_command.hpp" />
-    <ClInclude Include="command_selector.hpp" />
-    <ClInclude Include="commands\build_command.hpp" />
-    <ClInclude Include="commands\run_command.hpp" />
-    <ClInclude Include="pch.h" />
-    <ClInclude Include="deps\cpptoml.hpp" />
-    <ClInclude Include="config.hpp" />
-    <ClInclude Include="process.hpp" />
-    <ClInclude Include="toolchains\msvc\win32reg.hpp" />
-    <ClInclude Include="result.hpp" />
-    <ClInclude Include="toolchains\target.hpp" />
-    <ClInclude Include="toolchains\toolchain_config.hpp" />
-    <ClInclude Include="utils\span.hpp" />
-    <ClInclude Include="toolchains\toolchain_names.hpp" />
-    <ClInclude Include="utils\str.hpp" />
+    <ClInclude Include="dependency.hh" />
+    <ClInclude Include="tests\semver_req_tests.hh" />
+    <ClInclude Include="tests\semver_tests.hh" />
+    <ClInclude Include="tests\str_tests.hh" />
+    <ClInclude Include="tests\tests.hh" />
+    <ClInclude Include="toolchains\clang\clang_toolchain.hh" />
+    <ClInclude Include="toolchains\compiler.hh" />
+    <ClInclude Include="toolchains\msvc\cl_args.hh" />
+    <ClInclude Include="toolchains\msvc\msvc_toolchain.hh" />
+    <ClInclude Include="commands\base_command.hh" />
+    <ClInclude Include="env.hh" />
+    <ClInclude Include="commands\get_command.hh" />
+    <ClInclude Include="commands\set_command.hh" />
+    <ClInclude Include="console.hh" />
+    <ClInclude Include="core.hh" />
+    <ClInclude Include="commands\help_command.hh" />
+    <ClInclude Include="commands\init_command.hh" />
+    <ClInclude Include="command_selector.hh" />
+    <ClInclude Include="commands\build_command.hh" />
+    <ClInclude Include="commands\run_command.hh" />
+    <ClInclude Include="pch.hh" />
+    <ClInclude Include="deps\cpptoml.hh" />
+    <ClInclude Include="config.hh" />
+    <ClInclude Include="process.hh" />
+    <ClInclude Include="toolchains\msvc\win32reg.hh" />
+    <ClInclude Include="result.hh" />
+    <ClInclude Include="toolchains\target.hh" />
+    <ClInclude Include="toolchains\toolchain_config.hh" />
+    <ClInclude Include="utils\semver.hh" />
+    <ClInclude Include="utils\semver_req.hh" />
+    <ClInclude Include="utils\span.hh" />
+    <ClInclude Include="toolchains\toolchain_names.hh" />
+    <ClInclude Include="utils\str.hh" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp">
+    <ClCompile Include="pch.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.hh</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="main.cc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="icudt63.dll">

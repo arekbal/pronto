@@ -3,8 +3,8 @@
 #include <vector>
 #include <string>
 
-#include "compiler.hpp"
-#include "target.hpp"
+#include "compiler.hh"
+#include "target.hh"
 
 namespace pronto::toolchains
 {

@@ -1,9 +1,9 @@
 #pragma once
 
 #include <vector>
-#include "../utils/span.hpp"
+#include "../utils/span.hh"
 
-#include "base_command.hpp"
+#include "base_command.hh"
 
 namespace pronto::commands
 {

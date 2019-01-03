@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <cmath>
-#include "core.hpp"
+#include "core.hh"
 
 namespace pronto
 {
@@ -193,7 +193,7 @@ namespace pronto
       return console_indentation_scope(this);
     }
 
-    // extension overloads...
+    // extra overloads
     int err(const std::string& u8string)
     {
       return err(u8string.c_str());
@@ -212,6 +212,16 @@ namespace pronto
     int ok(const std::string& u8string)
     {
       return ok(u8string.c_str());
+    }
+
+    int err()
+    {
+      return err("ERR");
+    }
+
+    int ok()
+    {
+      return ok("OK");
     }
   };
 }

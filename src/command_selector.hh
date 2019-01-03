@@ -4,12 +4,12 @@
 #include <vector>
 #include <variant>
 #include <map>
-#include "commands/build_command.hpp"
-#include "commands/run_command.hpp"
-#include "commands/help_command.hpp"
-#include "commands/get_command.hpp"
-#include "commands/set_command.hpp"
-#include "utils/span.hpp"
+#include "commands/build_command.hh"
+#include "commands/run_command.hh"
+#include "commands/help_command.hh"
+#include "commands/get_command.hh"
+#include "commands/set_command.hh"
+#include "utils/span.hh"
 
 namespace pronto 
 {  

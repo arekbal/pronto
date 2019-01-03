@@ -3,7 +3,7 @@
 #include <vector>
 #include <filesystem>
 #include <string>
-#include "../../utils/str.hpp"
+#include "../../utils/str.hh"
 
 namespace pronto::toolchains::msvc
 {

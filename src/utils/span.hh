@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../core.hpp"
+#include "../core.hh"
 
 namespace pronto::utils
 {  
@@ -44,6 +44,12 @@ namespace pronto::utils
       begin += start;
       end -= (size - start - length);
       return span<iter_t>(begin, end);
+    }
+
+    template <typename item_t>
+    std::vector<item_t> to_vector()
+    {        
+      return std::vector<item_t>(begin_, end_);
     }
 
   private:

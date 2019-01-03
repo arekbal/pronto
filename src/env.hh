@@ -4,7 +4,7 @@
 #include <string>
 #include <iostream>
 #include <cstdlib>
-#include "utils/str.hpp"
+#include "utils/str.hh"
 
 namespace pronto
 {

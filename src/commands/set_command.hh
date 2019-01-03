@@ -1,14 +1,14 @@
 #pragma once
 
-#include "base_command.hpp"
+#include "base_command.hh"
 
 #include <vector>
-#include "../utils/span.hpp"
-#include "../console.hpp"
-#include "../config.hpp"
-#include "../toolchains/toolchain_names.hpp"
-#include "../core.hpp"
-#include "../env.hpp"
+#include "../utils/span.hh"
+#include "../console.hh"
+#include "../config.hh"
+#include "../toolchains/toolchain_names.hh"
+#include "../core.hh"
+#include "../env.hh"
 
 namespace pronto::commands
 {

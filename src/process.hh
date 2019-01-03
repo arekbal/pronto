@@ -4,7 +4,7 @@
 #include <shlwapi.h>
 #include <string>
 
-#include "utils/str.hpp"
+#include "utils/str.hh"
 
 namespace pronto
 {

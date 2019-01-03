@@ -2,16 +2,16 @@
 
 #include <filesystem>
 
-#include "../../console.hpp"
-#include "../../process.hpp"
-#include "../../env.hpp"
+#include "../../console.hh"
+#include "../../process.hh"
+#include "../../env.hh"
 
-#include "../../utils/str.hpp"
+#include "../../utils/str.hh"
 
-#include "../compiler.hpp"
-#include "../target.hpp"
+#include "../compiler.hh"
+#include "../target.hh"
 
-#include "../toolchain_config.hpp"
+#include "../toolchain_config.hh"
 
 namespace pronto::toolchains::clang
 {

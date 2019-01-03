@@ -18,96 +18,111 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pch.h">
+    <ClInclude Include="utils\semver.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="command_selector.hpp">
+    <ClInclude Include="utils\span.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="commands\run_command.hpp">
+    <ClInclude Include="utils\str.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="commands\help_command.hpp">
+    <ClInclude Include="toolchains\toolchain_names.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="commands\build_command.hpp">
+    <ClInclude Include="toolchains\toolchain_config.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="utils\span.hpp">
+    <ClInclude Include="toolchains\target.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="console.hpp">
+    <ClInclude Include="toolchains\compiler.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core.hpp">
+    <ClInclude Include="toolchains\msvc\win32reg.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="deps\cpptoml.hpp">
+    <ClInclude Include="toolchains\msvc\msvc_toolchain.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="config.hpp">
+    <ClInclude Include="toolchains\msvc\cl_args.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="commands\get_command.hpp">
+    <ClInclude Include="toolchains\clang\clang_toolchain.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="commands\set_command.hpp">
+    <ClInclude Include="commands\set_command.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="env.hpp">
+    <ClInclude Include="commands\run_command.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="utils\str.hpp">
+    <ClInclude Include="commands\init_command.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="commands\base_command.hpp">
+    <ClInclude Include="commands\help_command.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="commands\init_command.hpp">
+    <ClInclude Include="commands\get_command.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="process.hpp">
+    <ClInclude Include="commands\build_command.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="toolchains\toolchain_names.hpp">
+    <ClInclude Include="commands\base_command.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="result.hpp">
+    <ClInclude Include="deps\cpptoml.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="toolchains\msvc\win32reg.hpp">
+    <ClInclude Include="tests\str_tests.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="toolchains\msvc\cl_args.hpp">
+    <ClInclude Include="tests\tests.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="toolchains\msvc\msvc_toolchain.hpp">
+    <ClInclude Include="config.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="toolchains\clang\clang_toolchain.hpp">
+    <ClInclude Include="command_selector.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tests\tests.hpp">
+    <ClInclude Include="console.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tests\str_tests.hpp">
+    <ClInclude Include="core.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="toolchains\toolchain_config.hpp">
+    <ClInclude Include="env.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="toolchains\compiler.hpp">
+    <ClInclude Include="pch.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="toolchains\target.hpp">
+    <ClInclude Include="process.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="result.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\semver_tests.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dependency.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\semver_req_tests.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\semver_req.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp">
+    <ClCompile Include="main.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="pch.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

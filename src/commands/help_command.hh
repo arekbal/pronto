@@ -1,8 +1,8 @@
 #pragma once
 
-#include "base_command.hpp"
+#include "base_command.hh"
 
-#include "../utils/span.hpp"
+#include "../utils/span.hh"
 
 namespace pronto::commands
 {

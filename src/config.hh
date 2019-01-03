@@ -4,14 +4,18 @@
 #include <optional>
 #include <stdlib.h>
 #include <optional>
+#include <map>
+#include <vector>
+#include <string>
 
-#include "deps/cpptoml.hpp"
+#include "deps/cpptoml.hh"
 
-#include "toolchains/toolchain_names.hpp"
+#include "toolchains/toolchain_names.hh"
 
-#include "result.hpp"
-#include "env.hpp"
-#include "console.hpp"
+#include "result.hh"
+#include "env.hh"
+#include "console.hh"
+#include "utils/semver.hh"
 
 namespace pronto
 {
@@ -35,6 +39,9 @@ namespace pronto
     static constexpr const char* const PACKAGE_VERSION = "package.version";
     static constexpr const char* const PACKAGE_AUTHORS = "package.authors";
     static constexpr const char* const PACKAGE_PUBLISH = "package.publish";
+    static constexpr const char* const PACKAGE_INCLUDES = "package.includes";
+
+    static constexpr const char* const DEPENDENCIES = "dependencies";
 
     static constexpr const char* const TOML_FILE_NAME = "_pronto.toml";
 
@@ -149,16 +156,6 @@ namespace pronto
       return {};
     }
 
-    const std::vector<std::string> package_authors() 
-    {
-      auto o_package_authors_entry = config_file_->get_qualified_array_of<std::string>(PACKAGE_AUTHORS);
-
-      if (o_package_authors_entry && !o_package_authors_entry->empty())
-        return *o_package_authors_entry;
-
-      return {};
-    }
-
     const std::filesystem::path target_dir()
     {
       auto o_target_dir_entry = config_file_->get_qualified_as<std::string>(COMPILATION_TARGET_DIR);
@@ -179,17 +176,37 @@ namespace pronto
       return "";
     }
 
-    const std::string package_version() 
+    const utils::semver package_version()
     {
       auto o_package_version_entry = config_file_->get_qualified_as<std::string>(PACKAGE_VERSION);
 
       if (o_package_version_entry && !o_package_version_entry->empty())
-        return *o_package_version_entry;
+        return utils::semver(*o_package_version_entry);
 
-      return "";
+      return utils::semver();
     }
 
-    bool package_publish() 
+    const std::vector<std::string> package_authors()
+    {
+      auto o_package_authors_entry = config_file_->get_qualified_array_of<std::string>(PACKAGE_AUTHORS);
+
+      if (o_package_authors_entry && !o_package_authors_entry->empty())
+        return *o_package_authors_entry;
+
+      return {};
+    }
+
+    const std::vector<std::string> package_includes()
+    {
+      auto o_package_includes_entry = config_file_->get_qualified_array_of<std::string>(PACKAGE_INCLUDES);
+
+      if (o_package_includes_entry && !o_package_includes_entry->empty())
+        return *o_package_includes_entry;
+
+      return {};
+    }
+
+    bool package_publish()
     {
       auto o_package_publish_entry = config_file_->get_qualified_as<bool>(PACKAGE_PUBLISH);
 
@@ -197,6 +214,29 @@ namespace pronto
         return *o_package_publish_entry;
 
       return false;
+    }
+
+    std::map<const std::string, std::string> dependencies()
+    {
+      auto o_table = config_file_->get_table(DEPENDENCIES);
+
+      std::map<const std::string, std::string> map;
+
+      
+      for (auto& dependency : *o_table)
+      {
+        if (dependency.second->is_value())
+        {
+          std::string v = dependency.second->as<std::string>()->get();
+          map[dependency.first] = v;
+        }
+        else
+        {
+          //TODO: needs to support qualified detailed dependencies...
+        }
+      }
+
+      return map;
     }
 
   private:

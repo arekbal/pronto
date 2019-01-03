@@ -6,6 +6,9 @@
 #include <algorithm>
 #include <filesystem>
 
+#include <cctype>
+#include <locale>
+
 #include <stdio.h>
 
 #include <unicode/utypes.h>
@@ -26,6 +29,21 @@ namespace pronto::str
 #else
   const std::string new_line = "\n";
 #endif
+
+  template<typename out_t>
+  void split(const std::string &s, char delim, out_t result) {
+    std::stringstream ss(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) {
+      *(result++) = item;
+    }
+  }
+
+  std::vector<std::string> split(const std::string &s, char delim) {
+    std::vector<std::string> elems;
+    split(s, delim, std::back_inserter(elems));
+    return elems;
+  }
 
   std::wstring utf8_to_utf16(const std::string& utf8)
   {
@@ -188,18 +206,51 @@ namespace pronto::str
 
   std::optional<double> str_to_double(std::string& s)
   {
-    std::istringstream i(s);
+    std::istringstream z(s);
     double x;
-    if (!(i >> x))
+    if (!(z >> x))
       return {};
     return x;
   }
 
-  //std::string wstr2str(const std::wstring& wstr)
-  //{
-  //  using convert_typeX = std::codecvt_utf8<wchar_t>;
-  //  std::wstring_convert<convert_typeX, wchar_t> converterX;
+  // https://stackoverflow.com/questions/216823/whats-the-best-way-to-trim-stdstring
 
-  //  return converterX.to_bytes(wstr);
-  //}
+  // trim from start (in place)
+  static inline void ltrim(std::string &s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) {
+      return !std::isspace(ch);
+    }));
+  }
+
+  // trim from end (in place)
+  static inline void rtrim(std::string &s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
+      return !std::isspace(ch);
+    }).base(), s.end());
+  }
+
+  // trim from both ends (in place)
+  static inline void trim(std::string &s) {
+    ltrim(s);
+    rtrim(s);
+  }
+
+  // trim from start (copying)
+  static inline std::string ltrim_copy(std::string s) {
+    ltrim(s);
+    return s;
+  }
+
+  // trim from end (copying)
+  static inline std::string rtrim_copy(std::string s) {
+    rtrim(s);
+    return s;
+  }
+
+  // trim from both ends (copying)
+  static inline std::string trim_copy(std::string s) {
+    trim(s);
+    return s;
+  }
+
 }

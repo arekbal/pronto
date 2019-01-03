@@ -2,15 +2,15 @@
 
 #include <filesystem>
 
-#include "../../console.hpp"
-#include "../../process.hpp"
-#include "../../env.hpp"
+#include "../../console.hh"
+#include "../../process.hh"
+#include "../../env.hh"
 
-#include "win32reg.hpp"
-#include "cl_args.hpp"
+#include "win32reg.hh"
+#include "cl_args.hh"
 
-#include "../compiler.hpp"
-#include "../target.hpp"
+#include "../compiler.hh"
+#include "../target.hh"
 
 namespace pronto::toolchains::msvc
 {
