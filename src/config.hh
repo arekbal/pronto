@@ -16,6 +16,8 @@
 #include "env.hh"
 #include "console.hh"
 #include "utils/semver.hh"
+#include "utils/semver_req.hh"
+#include "dependency.hh"
 
 namespace pronto
 {
@@ -42,6 +44,13 @@ namespace pronto
     static constexpr const char* const PACKAGE_INCLUDES = "package.includes";
 
     static constexpr const char* const DEPENDENCIES = "dependencies";
+    static constexpr const char* const BUILD_DEPENDENCIES = "build-dependencies";
+    static constexpr const char* const DEPENDENCY_VERSION = "version";
+
+    static constexpr const char* const DEPENDENCY_GIT = "git";
+    static constexpr const char* const DEPENDENCY_GIT_BRANCH = "branch";
+
+    static constexpr const char* const DEPENDENCY_GIT_BRANCH_DEFAULT = "master";
 
     static constexpr const char* const TOML_FILE_NAME = "_pronto.toml";
 
@@ -216,30 +225,55 @@ namespace pronto
       return false;
     }
 
-    std::map<const std::string, std::string> dependencies()
+    std::map<const std::string, dependency> dependencies()
     {
-      auto o_table = config_file_->get_table(DEPENDENCIES);
+      return get_dependencies(DEPENDENCIES);
+    }
 
-      std::map<const std::string, std::string> map;
+    std::map<const std::string, dependency> build_dependencies()
+    {
+      return get_dependencies(BUILD_DEPENDENCIES);
+    }
 
-      
-      for (auto& dependency : *o_table)
+  private:
+
+    std::map<const std::string, dependency> get_dependencies(const std::string& key)
+    {
+      auto o_deps = config_file_->get_table(key);
+
+      std::map<const std::string, dependency> map;
+
+      for (auto& dep : *o_deps)
       {
-        if (dependency.second->is_value())
+        auto& key = dep.first;
+        if (dep.second->is_value())
         {
-          std::string v = dependency.second->as<std::string>()->get();
-          map[dependency.first] = v;
+          auto ver_req = dep.second->as<std::string>()->get();
+          map[key] = dependency(key, utils::semver_req(ver_req));
         }
         else
         {
-          //TODO: needs to support qualified detailed dependencies...
+          auto dep_items = dep.second->as_table();
+          auto o_ver_req = dep_items->get_as<std::string>(DEPENDENCY_VERSION);
+          if (o_ver_req)
+            map[key] = dependency(key, utils::semver_req(*o_ver_req));
+          else
+            map[key] = dependency(key, utils::semver_req("*"));
+
+          auto o_git = dep_items->get_as<std::string>(DEPENDENCY_GIT);
+          auto o_branch = dep_items->get_as<std::string>(DEPENDENCY_GIT_BRANCH);
+
+          if (o_git)
+          {
+            map[key].git = *o_git;
+            map[key].git_branch = o_branch ? *o_branch : DEPENDENCY_GIT_BRANCH_DEFAULT;
+          }
         }
       }
 
       return map;
     }
 
-  private:
 
     std::optional<fs::path> find_toml(const std::filesystem::path& path)
     {

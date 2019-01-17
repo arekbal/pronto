@@ -95,8 +95,11 @@ namespace pronto::commands
 
       auto root = config_.root_path();
 
-
       auto deps = config_.dependencies();
+
+      auto build_deps = config_.build_dependencies();
+
+      // TODO: download and build 'dependencies' and 'build-dependencies'
 
       for (const auto& entry : fs::recursive_directory_iterator(root))
       {
@@ -152,14 +155,14 @@ namespace pronto::commands
 
       switch (toolchain)
       {
-      case toolchains::toolchain_names::msvc:
+      /*case toolchains::toolchain_names::msvc:
       {
         toolchains::msvc::msvc_toolchain<console_t, process_t, env_t> msvc_toolchain_;
         return msvc_toolchain_.run(cfg);
-      }
+      }*/
       case toolchains::toolchain_names::clang:
       {
-        toolchains::clang::clang_toolchain<console_t, process_t, env_t> clang_toolchain_;        
+        toolchains::clang::clang_toolchain<console_t, process_t, env_t> clang_toolchain_;     
         return clang_toolchain_.run(cfg);
       }
       default:

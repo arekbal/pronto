@@ -31,6 +31,10 @@ bool semver_tests(pronto::console& out)
       return out.err("ERR: \
 '1.0.0' should be smaller than '11.0.0' instead it is bigger?!?");
 
+    if (v.to_string().compare("49.112.37-hello-world-that-is-a-bunch-of-tags") != 0)
+      return out.err("ERR: \
+parsed semver '49.112.37-hello-world-that-is-a-bunch-of-tags' does not equal value returned by to_string()");
+
     if (v.tags.empty() || (v.tags[0]).compare(std::string("hello")) != 0)
       return out.err("ERR: \
 '49.112.37-hello-world-that-is-a-bunch-of-tags' 1st tag does not equal 'hello'");
@@ -46,7 +50,6 @@ bool semver_tests(pronto::console& out)
     if (v.tags.size() < 8 || (v.tags[7]).compare(std::string("tags")) != 0)
       return out.err("ERR: \
 '49.112.37-hello-world-that-is-a-bunch-of-tags' 8th tag does not equal 'tags'");
-
     {
       auto s = v.to_string();
       if (s.compare("49.112.37-hello-world-that-is-a-bunch-of-tags") != 0)

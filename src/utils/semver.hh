@@ -16,6 +16,7 @@ namespace pronto::utils
     std::vector<std::string> tags;
   
     semver()
+      :major(0), minor(0), patch(0)
     {
     }
 
@@ -60,7 +61,7 @@ namespace pronto::utils
       return ver;
     }
 
-    bool empty()
+    bool empty() const
     {
       return major == 0 && minor == 0 && patch == 0;
     }
@@ -75,7 +76,7 @@ namespace pronto::utils
     friend bool operator <=(const semver& lhs, const semver& rhs) { return !(lhs > rhs); }
     friend bool operator >=(const semver& lhs, const semver& rhs) { return !(lhs < rhs); }
 
-    std::string to_string()
+    std::string to_string() const
     {
       std::string s(std::to_string(major));
       s += ".";

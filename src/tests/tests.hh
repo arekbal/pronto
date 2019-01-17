@@ -15,8 +15,8 @@ int main(int argc, char **argv)
 
   auto _ = console_.indent();
 
-  return 
-    semver_tests(console_) &&
+  return     
     wildcard_path_match_tests(console_) &&
+    semver_tests(console_) &&
     semver_req_tests(console_);
 }
