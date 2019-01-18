@@ -42,7 +42,7 @@ namespace pronto::commands
       {
         result_err<std::string> res = config_.load();
         
-        if (!res.is_ok())
+        if (not res.is_ok())
         {
           console_.err(res.error());
           return -1;
@@ -57,11 +57,11 @@ namespace pronto::commands
 
       auto& arg0 = *iter;
 
-      if (!str::starts_with(arg0, "-"))
+      if (not str::starts_with(arg0, "-"))
       {
         result_err<std::string> res = config_.load(arg0);
 
-        if (!res.is_ok())
+        if (not res.is_ok())
         {
           console_.err(res.error());
           return -1;
@@ -70,7 +70,7 @@ namespace pronto::commands
         return run_toolchain();
       }
       
-     /* if (first.compare("-p") == 0 || first.compare("-profile") == 0)
+      /* if (first.compare("-p") == 0 || first.compare("-profile") == 0)
       {
         iter++;
         
@@ -88,18 +88,18 @@ namespace pronto::commands
     {
       auto toolchain = config_.toolchain();
 
+      auto root = config_.root_path();
+
+      if (not download_deps())
+        return -1;
+
+      if (not build_deps())
+        return -1;
+
       std::vector<std::string> sources_with_wildcards = config_.sources();
       std::vector<std::string> excludes_with_wildcards = config_.excludes();
 
       std::vector<std::string> sources = {};
-
-      auto root = config_.root_path();
-
-      auto deps = config_.dependencies();
-
-      auto build_deps = config_.build_dependencies();
-
-      // TODO: download and build 'dependencies' and 'build-dependencies'
 
       for (const auto& entry : fs::recursive_directory_iterator(root))
       {
@@ -169,6 +169,54 @@ namespace pronto::commands
         console_.err("currently unsupported toolkit");
         return -1;
       }
+    }
+
+    bool download_deps()
+    {
+      auto deps = config_.dependencies();
+
+      for (auto& dep : deps)
+      {
+        if (not dep.git.empty())
+        {
+          std::filesystem::path dir = config_.toml_path().parent_path() / config_.target_dir();
+          dir /= std::filesystem::path("deps");
+          dir /= dep.name;
+
+          std::filesystem::create_directories(dir);
+
+          std::filesystem::current_path(dir);
+          
+          std::string cmd = "git clone --single-branch  --depth 1 -b ";
+
+          if (not dep.git_tag.empty())
+          {
+            cmd += "'";
+            cmd += dep.git_tag;
+            cmd += "'";
+          }
+          else
+            cmd += dep.git_branch;
+
+          cmd += " ";
+          cmd += dep.git;
+
+          //
+          // TODO: support tags
+          //
+          // git clone - b 'v2.0' --single - branch --depth 1 https://github.com/git/git.git
+          //
+
+          if (proc_.run(cmd) != 0)
+            return false;                  
+        }
+      }
+      return true;
+    }
+
+    bool build_deps()
+    {
+      return true;
     }
 
     const std::string get_target_compiler_dir_name(pronto::toolchains::toolchain_config& cfg)

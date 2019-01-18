@@ -197,6 +197,7 @@
     <ClInclude Include="result.hh" />
     <ClInclude Include="toolchains\target.hh" />
     <ClInclude Include="toolchains\toolchain_config.hh" />
+    <ClInclude Include="utils\iter.hh" />
     <ClInclude Include="utils\semver.hh" />
     <ClInclude Include="utils\semver_req.hh" />
     <ClInclude Include="utils\span.hh" />

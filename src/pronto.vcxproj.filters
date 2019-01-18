@@ -117,6 +117,9 @@
     <ClInclude Include="utils\semver_req.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="utils\iter.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cc">

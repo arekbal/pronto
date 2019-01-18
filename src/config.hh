@@ -17,7 +17,10 @@
 #include "console.hh"
 #include "utils/semver.hh"
 #include "utils/semver_req.hh"
+#include "utils/iter.hh"
+
 #include "dependency.hh"
+
 
 namespace pronto
 {
@@ -45,12 +48,16 @@ namespace pronto
 
     static constexpr const char* const DEPENDENCIES = "dependencies";
     static constexpr const char* const BUILD_DEPENDENCIES = "build-dependencies";
+    static constexpr const char* const DEV_DEPENDENCIES = "dev-dependencies";
+
     static constexpr const char* const DEPENDENCY_VERSION = "version";
 
     static constexpr const char* const DEPENDENCY_GIT = "git";
     static constexpr const char* const DEPENDENCY_GIT_BRANCH = "branch";
 
     static constexpr const char* const DEPENDENCY_GIT_BRANCH_DEFAULT = "master";
+
+    static constexpr const char* const DEPENDENCY_PATH = "path";
 
     static constexpr const char* const TOML_FILE_NAME = "_pronto.toml";
 
@@ -95,12 +102,17 @@ namespace pronto
         return ok();
       }
 
-      auto toml_path_l = find_toml(path);
+      auto toml_path_l = find_inner_toml(path);
 
-      if (!toml_path_l.has_value())
+      if (not toml_path_l.has_value())
       {
-        return fail<std::string>(TOML_NOT_FOUND);
-      }
+        toml_path_l = find_outer_toml(path);
+
+        if (not toml_path_l.has_value())
+        {
+          return fail<std::string>(TOML_NOT_FOUND);
+        }
+      }     
 
       path_ = toml_path_l.value();
 
@@ -123,7 +135,7 @@ namespace pronto
 
     result_err<std::string> load() { return load(std::filesystem::current_path()); }
     
-    toolchains::toolchain_names toolchain() 
+    toolchains::toolchain_names toolchain()
     {
       auto o_toolchain_entry = config_file_->get_qualified_as<std::string>(COMPILATION_TOOLCHAIN);
 
@@ -145,7 +157,7 @@ namespace pronto
       }
     }
 
-    const std::vector<std::string> sources() 
+    const std::vector<std::string> sources() const
     {
       auto o_sources_entry = config_file_->get_qualified_array_of<std::string>(COMPILATION_SOURCES);
       
@@ -155,7 +167,7 @@ namespace pronto
       return { std::string("*.cpp"), std::string("*.cc") };
     }
 
-    const std::vector<std::string> excludes() 
+    const std::vector<std::string> excludes() const
     {
       auto o_excludes_entry = config_file_->get_qualified_array_of<std::string>(COMPILATION_EXCLUDES);      
 
@@ -165,7 +177,7 @@ namespace pronto
       return {};
     }
 
-    const std::filesystem::path target_dir()
+    const std::filesystem::path target_dir() const
     {
       auto o_target_dir_entry = config_file_->get_qualified_as<std::string>(COMPILATION_TARGET_DIR);
 
@@ -175,7 +187,7 @@ namespace pronto
       return std::filesystem::path(COMPILATION_TARGET_DIR_DEFAULT);
     }
 
-    const std::string package_name()
+    const std::string package_name() const
     {
       auto o_package_name_entry = config_file_->get_qualified_as<std::string>(PACKAGE_NAME);
     
@@ -185,7 +197,7 @@ namespace pronto
       return "";
     }
 
-    const utils::semver package_version()
+    const utils::semver package_version() const
     {
       auto o_package_version_entry = config_file_->get_qualified_as<std::string>(PACKAGE_VERSION);
 
@@ -195,7 +207,7 @@ namespace pronto
       return utils::semver();
     }
 
-    const std::vector<std::string> package_authors()
+    const std::vector<std::string> package_authors() const
     {
       auto o_package_authors_entry = config_file_->get_qualified_array_of<std::string>(PACKAGE_AUTHORS);
 
@@ -205,7 +217,7 @@ namespace pronto
       return {};
     }
 
-    const std::vector<std::string> package_includes()
+    const std::vector<std::string> package_includes() const
     {
       auto o_package_includes_entry = config_file_->get_qualified_array_of<std::string>(PACKAGE_INCLUDES);
 
@@ -215,7 +227,7 @@ namespace pronto
       return {};
     }
 
-    bool package_publish()
+    bool package_publish() const
     {
       auto o_package_publish_entry = config_file_->get_qualified_as<bool>(PACKAGE_PUBLISH);
 
@@ -225,23 +237,28 @@ namespace pronto
       return false;
     }
 
-    std::map<const std::string, dependency> dependencies()
+    std::vector<dependency> dependencies() const
     {
       return get_dependencies(DEPENDENCIES);
     }
 
-    std::map<const std::string, dependency> build_dependencies()
+    std::vector<dependency> build_dependencies() const
     {
       return get_dependencies(BUILD_DEPENDENCIES);
     }
 
+    std::vector<dependency> dev_dependencies() const
+    {
+      return get_dependencies(DEV_DEPENDENCIES);
+    }
+
   private:
 
-    std::map<const std::string, dependency> get_dependencies(const std::string& key)
+    std::vector<dependency> get_dependencies(const std::string& key) const
     {
       auto o_deps = config_file_->get_table(key);
 
-      std::map<const std::string, dependency> map;
+      std::vector<dependency> vec;
 
       for (auto& dep : *o_deps)
       {
@@ -249,33 +266,40 @@ namespace pronto
         if (dep.second->is_value())
         {
           auto ver_req = dep.second->as<std::string>()->get();
-          map[key] = dependency(key, utils::semver_req(ver_req));
+          vec.emplace_back(key, utils::semver_req(ver_req));
         }
         else
         {
           auto dep_items = dep.second->as_table();
+
           auto o_ver_req = dep_items->get_as<std::string>(DEPENDENCY_VERSION);
           if (o_ver_req)
-            map[key] = dependency(key, utils::semver_req(*o_ver_req));
+            vec.emplace_back(key, utils::semver_req(*o_ver_req));
           else
-            map[key] = dependency(key, utils::semver_req("*"));
+            vec.emplace_back(key, utils::semver_req("*"));
 
-          auto o_git = dep_items->get_as<std::string>(DEPENDENCY_GIT);
-          auto o_branch = dep_items->get_as<std::string>(DEPENDENCY_GIT_BRANCH);
-
-          if (o_git)
           {
-            map[key].git = *o_git;
-            map[key].git_branch = o_branch ? *o_branch : DEPENDENCY_GIT_BRANCH_DEFAULT;
+            auto o_git = dep_items->get_as<std::string>(DEPENDENCY_GIT);
+            auto o_branch = dep_items->get_as<std::string>(DEPENDENCY_GIT_BRANCH);
+
+            if (o_git)
+            {
+              vec.back().git = *o_git;
+              vec.back().git_branch = o_branch ? *o_branch : DEPENDENCY_GIT_BRANCH_DEFAULT;
+            }
+          }
+
+          {
+            auto o_path = dep_items->get_as<std::string>(DEPENDENCY_PATH);
+            if (o_path)
+              vec.back().path = *o_path;
           }
         }
       }
-
-      return map;
+      return vec;
     }
 
-
-    std::optional<fs::path> find_toml(const std::filesystem::path& path)
+    std::optional<fs::path> find_outer_toml(const std::filesystem::path& path)
     {
       auto path_l = path;
       do
@@ -288,7 +312,7 @@ namespace pronto
           return std::filesystem::absolute(filepath);
         }
 
-        if (!path_l.has_parent_path())
+        if (not path_l.has_parent_path())
         {
           return {};
         }
@@ -296,6 +320,35 @@ namespace pronto
         path_l = path_l.parent_path();
 
       } while(true);
+    }
+
+    std::optional<fs::path> find_inner_toml(const std::filesystem::path& path)
+    {
+      auto path_l = path;
+      do
+      {
+        auto filepath = path_l;
+        filepath /= TOML_FILE_NAME;
+
+        if (fs::exists(filepath))
+        {
+          return std::filesystem::absolute(filepath);        }
+        
+        auto dir_iter = std::filesystem::directory_iterator(path_l); 
+
+        int dir_count = 0;
+        for (auto& dir : dir_iter)
+        {
+          dir_count++;
+          path_l = dir;
+          if(dir_count > 1)
+            return {};
+        }
+
+        if (dir_count == 0)
+          return {};
+
+      } while (true);
     }
   };
 }
